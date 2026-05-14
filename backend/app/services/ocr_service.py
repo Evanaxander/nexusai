@@ -4,6 +4,8 @@ import logging
 from groq import Groq
 from app.core.config import get_settings
 
+from app.core.observability import track_llm_call  # ← add import
+
 logger = logging.getLogger(__name__)
 settings = get_settings()
 
@@ -56,6 +58,7 @@ def _clean_json_response(raw: str) -> str:
     return raw.strip()
 
 
+@track_llm_call("invoice_ocr")
 def extract_invoice_data(image_bytes: bytes, content_type: str) -> dict:
     """
     Main OCR function. Sends image to Groq Vision,
@@ -132,3 +135,5 @@ def extract_invoice_data(image_bytes: bytes, content_type: str) -> dict:
     )
 
     return extracted
+
+

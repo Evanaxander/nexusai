@@ -22,6 +22,7 @@ class AgentResponse(BaseModel):
     document_sources: list[dict]
     sentiment_summary: dict        # ← add
     agents_used: dict[str, bool]
+    duration_seconds: float    
 
 @router.post(
     "/chat",

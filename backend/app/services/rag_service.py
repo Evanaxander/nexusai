@@ -18,6 +18,7 @@ from groq import Groq
 import httpx
 
 from app.core.config import get_settings
+from app.core.observability import track_llm_call
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -336,7 +337,7 @@ def retrieve_chunks(
             limit=top_k,
             query_filter=search_filter,
             with_payload=True,  # return the chunk text and metadata
-            score_threshold=0.3  # ignore chunks below 30% similarity
+            score_threshold=0.15  # ignore chunks below 15% similarity
         )
     elif hasattr(client, "search_points"):
         results = client.search_points(
@@ -345,7 +346,7 @@ def retrieve_chunks(
             limit=top_k,
             query_filter=search_filter,
             with_payload=True,
-            score_threshold=0.3
+            score_threshold=0.15
         ).result
     else:
         # REST fallback for older clients
@@ -353,7 +354,7 @@ def retrieve_chunks(
             "vector": query_vector,
             "limit": top_k,
             "with_payload": True,
-            "score_threshold": 0.3,
+            "score_threshold": 0.15,
         }
         if search_filter is not None:
             payload["filter"] = search_filter.model_dump()
@@ -400,6 +401,7 @@ def build_context(chunks: list[dict]) -> str:
     return "\n\n---\n\n".join(context_parts)
 
 
+@track_llm_call("rag_generate_answer")
 def generate_answer(question: str, chunks: list[dict]) -> str:
     """
     Sends retrieved chunks + question to Groq LLM.
@@ -438,6 +440,7 @@ def generate_answer(question: str, chunks: list[dict]) -> str:
     return response.choices[0].message.content
 
 
+@track_llm_call("rag_generate_stream")
 def generate_answer_stream(
     question: str,
     chunks: list[dict]
