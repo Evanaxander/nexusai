@@ -1,4 +1,4 @@
-# 🚀 NexusAI
+#  NexusAI
 
 **The Intelligent Business Assistant You've Been Waiting For**
 
@@ -8,9 +8,9 @@ NexusAI is a sophisticated **multi-agent AI platform** that transforms how you m
 
 ---
 
-## ✨ What Makes NexusAI Amazing
+##  What Makes NexusAI Amazing
 
-### 🤖 **Multi-Agent Intelligence System**
+###  **Multi-Agent Intelligence System**
 Instead of a single rigid AI, NexusAI uses **4 specialized agents** that work together:
 
 - **Planner Agent** — Understands your question and routes to the right expert
@@ -20,14 +20,14 @@ Instead of a single rigid AI, NexusAI uses **4 specialized agents** that work to
 
 Each agent can be activated independently or work together for complex queries.
 
-### 📸 **AI-Powered Invoice Extraction**
+###  **AI-Powered Invoice Extraction**
 - **Groq Vision AI** extracts vendor, amount, date, and line items from receipts automatically
 - Works with images, not manual data entry
 - Handles multiple currencies and formats
 - Confidence scoring for quality assurance
 - **Delete invoices anytime** and queries adapt instantly
 
-### 📚 **Intelligent Document Q&A (RAG)**
+###  **Intelligent Document Q&A (RAG)**
 Upload PDFs and ask natural language questions:
 - Semantic search through thousands of pages
 - **Qdrant vector database** for lightning-fast retrieval
@@ -35,21 +35,21 @@ Upload PDFs and ask natural language questions:
 - Context-aware answers with citations and page numbers
 - Never hallucinate — only answers from your documents
 
-### 💭 **Sentiment Intelligence**
+###  **Sentiment Intelligence**
 - **Fine-tuned DistilBERT** with LoRA adapters
 - Classifies feedback as positive/negative/neutral instantly
 - Batch processing for efficiency
 - Automatic alert thresholds
 - Aggregate summaries across multiple texts
 
-### 🎨 **Beautiful React Frontend**
+###  **Beautiful React Frontend**
 - **Chat interface** for natural conversations with your AI assistant
 - **Invoice dashboard** with upload, tracking, and management
 - **Document explorer** for searching your uploaded PDFs
 - **Metrics dashboard** with real-time analytics
 - Dark theme, responsive design, instant updates
 
-### ⚡ **Production-Ready Architecture**
+###  **Production-Ready Architecture**
 - FastAPI for blazing-fast async APIs
 - PostgreSQL for reliable data storage
 - Redis for caching and sessions
@@ -59,7 +59,7 @@ Upload PDFs and ask natural language questions:
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.9+
@@ -96,7 +96,7 @@ npm run dev
 
 ---
 
-## 💡 Usage Examples
+##  Usage Examples
 
 ### Chat with Your Data
 ```
@@ -114,7 +114,7 @@ You: "Analyze the customer feedback I pasted below"
 NexusAI: "Sentiment Summary:
 • Total texts: 5
 • Positive: 60% | Negative: 20% | Neutral: 20%
-• Alert: No ⚠️"
+• Alert: No "
 ```
 
 ### Manage Invoices
@@ -133,7 +133,7 @@ NexusAI: "Sentiment Summary:
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Three-Tier System
 
@@ -176,7 +176,7 @@ NexusAI: "Sentiment Summary:
 
 ---
 
-## 📊 Project Structure
+##  Project Structure
 
 ```
 nexusai/
@@ -236,7 +236,7 @@ nexusai/
 
 ---
 
-## 🎯 Features
+##  Features
 
 - ✅ **Upload & Extract** — OCR invoices to structured data
 - ✅ **Query Invoices** — Ask about expenses any time
@@ -252,7 +252,7 @@ nexusai/
 
 ---
 
-## 🔧 Environment Setup
+##  Environment Setup
 
 Create `backend/.env`:
 
@@ -267,7 +267,7 @@ LANGSMITH_API_KEY=optional_for_tracing
 
 ---
 
-## 📚 API Examples
+##  API Examples
 
 ### Chat with Agent
 ```bash
@@ -295,22 +295,22 @@ curl -X POST http://localhost:8000/api/v1/documents/query \
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 We welcome contributions! Whether it's bug fixes, new features, or documentation improvements.
 
 ---
 
-## 📄 License
+##  License
 
 This project is open source and available under the MIT License.
 
 ---
 
-## 🎉 Get Started Now
+##  Get Started Now
 
 Transform your business data management today. Start with the quick setup above and experience the power of multi-agent AI.
 
 **Questions?** Check the full API docs at `http://localhost:8000/docs` after running the project.
 
-Happy analyzing! 🚀
+Happy analyzing! 
