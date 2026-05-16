@@ -294,30 +294,14 @@ def retrieve_chunks(
     top_k: int = 5,
     document_ids: list[int] | None = None
 ) -> list[dict]:
-    """
-    Finds the most relevant chunks for a question.
-    
-    Process:
-    1. Embed the question into a vector
-    2. Search Qdrant for the closest chunk vectors
-    3. Optionally filter by document_ids
-    4. Return chunks with their metadata and scores
-    
-    Why filter by document_ids?
-    If a user uploads 10 documents but only wants to
-    query 2 specific contracts, we filter at the vector
-    DB level — much faster than filtering after retrieval.
-    """
     model = get_embedding_model()
     client = get_qdrant_client()
 
-    # Embed the question
     query_vector = model.encode(
         question,
         normalize_embeddings=True
     ).tolist()
 
-    # Build optional filter for specific documents
     search_filter = None
     if document_ids:
         search_filter = Filter(
@@ -329,43 +313,20 @@ def retrieve_chunks(
             ]
         )
 
-    # Search Qdrant (support multiple client API versions, fallback to REST)
-    if hasattr(client, "search"):
+    # Collection may not exist yet if no documents uploaded
+    try:
         results = client.search(
             collection_name=COLLECTION_NAME,
             query_vector=query_vector,
             limit=top_k,
             query_filter=search_filter,
-            with_payload=True,  # return the chunk text and metadata
-            score_threshold=0.15  # ignore chunks below 15% similarity
-        )
-    elif hasattr(client, "search_points"):
-        results = client.search_points(
-            collection_name=COLLECTION_NAME,
-            vector=query_vector,
-            limit=top_k,
-            query_filter=search_filter,
             with_payload=True,
             score_threshold=0.15
-        ).result
-    else:
-        # REST fallback for older clients
-        payload = {
-            "vector": query_vector,
-            "limit": top_k,
-            "with_payload": True,
-            "score_threshold": 0.15,
-        }
-        if search_filter is not None:
-            payload["filter"] = search_filter.model_dump()
+        )
+    except Exception as e:
+        logger.warning(f"Qdrant search failed: {e} — returning empty results")
+        return []
 
-        url = f"http://{settings.qdrant_host}:{settings.qdrant_port}/collections/{COLLECTION_NAME}/points/search"
-        with httpx.Client(timeout=10.0) as http:
-            resp = http.post(url, json=payload)
-            resp.raise_for_status()
-            results = resp.json().get("result", [])
-
-    # Format results
     chunks = []
     for result in results:
         payload = result.payload
@@ -378,9 +339,7 @@ def retrieve_chunks(
             "score": round(result.score, 4)
         })
 
-    logger.info(
-        f"Retrieved {len(chunks)} chunks for: '{question[:50]}...'"
-    )
+    logger.info(f"Retrieved {len(chunks)} chunks for: '{question[:50]}'")
     return chunks
 
 
