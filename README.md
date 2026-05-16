@@ -584,3 +584,7 @@ Full list: see `requirements.txt`
 
 **Last Updated**: May 3, 2026
 **Version**: 1.0.0
+
+
+<img width="1296" height="467" alt="image" src="https://github.com/user-attachments/assets/8a3b4e5b-5eba-4ae7-8a0f-9688eb6a8c9e" />
+
