@@ -322,10 +322,34 @@ def build_graph(db: Session):
 
     graph = SimpleGraph()
 
-    def document_agent_node(s):
-        doc_q = s.get("document_question") or s.get("user_message")
-        answer, sources = _answer_document_question(doc_q)
-        return {**s, "document_answer": answer, "document_sources": sources}
+    def document_agent_node(state: AgentState) -> AgentState:
+        """
+        Node 3 — Document Agent.
+        Runs RAG retrieval and generation on uploaded documents.
+        """
+        question = state.get("document_question") or state["user_message"]
+        logger.info(f"Document Agent searching for: '{question[:60]}...'")
+
+        chunks = retrieve_chunks(question=question, top_k=5)
+
+        if not chunks:
+            return {
+                **state,
+                "document_answer": (
+                    "No relevant information found in uploaded documents."
+                ),
+                "document_sources": []
+            }
+
+        answer = generate_answer(question, chunks)
+
+        logger.info(f"Document Agent found {len(chunks)} chunks")
+
+        return {
+            **state,
+            "document_answer": answer,
+            "document_sources": chunks
+        }
 
     def sentiment_agent_node_wrapper(s):
         results, summary = sentiment_agent_node(s.get("user_message", ""))
