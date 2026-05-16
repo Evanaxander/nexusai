@@ -1,9 +1,8 @@
-# Generated evaluation outputs
-*.json
+# Generated evaluation outputs - allow reports
 *.png
-*.md
-!README.md
+!ragas_comparison.png
 !RAGAS_EVALUATION_REPORT.md
+!ragas_results.json
 
 # Jupyter
 .ipynb_checkpoints/
