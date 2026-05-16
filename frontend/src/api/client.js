@@ -36,7 +36,9 @@ export const documentApi = {
       document_ids: documentIds,
       top_k: 5,
       stream: false
-    }).then(r => r.data)
+    }).then(r => r.data),
+  delete: (documentId) =>
+    client.delete(`/documents/${documentId}`).then(r => r.data)
 }
 
 export const metricsApi = {

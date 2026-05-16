@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { documentApi } from '../api/client'
-import { Upload, Search, FileText } from 'lucide-react'
+import { Upload, Search, FileText, Trash2 } from 'lucide-react'
 
 export default function Documents() {
   const [documents, setDocuments] = useState([])
@@ -9,6 +9,7 @@ export default function Documents() {
   const [uploading, setUploading] = useState(false)
   const [querying, setQuerying] = useState(false)
   const [message, setMessage] = useState('')
+  const [deleteConfirm, setDeleteConfirm] = useState(null)
 
   useEffect(() => {
     documentApi.list().then(setDocuments).catch(console.error)
@@ -52,6 +53,23 @@ export default function Documents() {
       setAnswer({ answer: 'Query failed. Please try again.' })
     } finally {
       setQuerying(false)
+    }
+  }
+
+  const handleDelete = async (docId, docName) => {
+    if (!window.confirm(`Delete "${docName}"? This will also remove all indexed vectors.`)) {
+      return
+    }
+
+    try {
+      await documentApi.delete(docId)
+      setMessage(`Deleted: ${docName}`)
+      const updated = await documentApi.list()
+      setDocuments(updated)
+    } catch (err) {
+      setMessage('Delete failed. Please try again.')
+    } finally {
+      setDeleteConfirm(null)
     }
   }
 
@@ -191,14 +209,35 @@ export default function Documents() {
                 {doc.total_pages} pages · {doc.total_chunks} chunks
               </div>
             </div>
-            <span style={{
-              padding: '4px 10px', borderRadius: '4px',
-              fontSize: '12px',
-              background: doc.is_indexed ? '#f0fff4' : '#fff7ed',
-              color: doc.is_indexed ? '#2d6a4f' : '#c05621'
-            }}>
-              {doc.is_indexed ? 'Indexed' : 'Processing'}
-            </span>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <span style={{
+                padding: '4px 10px', borderRadius: '4px',
+                fontSize: '12px',
+                background: doc.is_indexed ? '#f0fff4' : '#fff7ed',
+                color: doc.is_indexed ? '#2d6a4f' : '#c05621'
+              }}>
+                {doc.is_indexed ? 'Indexed' : 'Processing'}
+              </span>
+              <button
+                onClick={() => handleDelete(doc.id, doc.original_name)}
+                style={{
+                  padding: '6px 10px',
+                  background: '#fee2e2',
+                  color: '#dc2626',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontSize: '12px',
+                  fontWeight: 500
+                }}
+              >
+                <Trash2 size={14} />
+                Delete
+              </button>
+            </div>
           </div>
         ))}
         {documents.length === 0 && (
