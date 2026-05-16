@@ -1,0 +1,16 @@
+# Generated evaluation outputs
+*.json
+*.png
+*.md
+!README.md
+!RAGAS_EVALUATION_REPORT.md
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Python
+.env
+venv/
+.venv/
